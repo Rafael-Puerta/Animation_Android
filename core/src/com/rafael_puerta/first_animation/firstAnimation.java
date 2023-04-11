@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class firstAnimation extends ApplicationAdapter implements ApplicationListener {
 
 	// Constant rows and columns of the sprite sheet
-	private static final int FRAME_COLS = 6, FRAME_ROWS = 5;
+	private static final int FRAME_COLS = 3, FRAME_ROWS = 1;
 
 	// Objects used
 	Animation<TextureRegion> walkAnimation; // Must declare frame type (TextureRegion)
@@ -27,7 +27,7 @@ public class firstAnimation extends ApplicationAdapter implements ApplicationLis
 	public void create() {
 
 		// Load the sprite sheet as a Texture
-		walkSheet = new Texture(Gdx.files.internal("sprite-animation4.png"));
+		walkSheet = new Texture(Gdx.files.internal("beatRecortado.png"));
 
 		// Use the split utility method to create a 2D array of TextureRegions. This is
 		// possible because this sprite sheet contains frames of equal size and they are
@@ -47,7 +47,7 @@ public class firstAnimation extends ApplicationAdapter implements ApplicationLis
 		}
 
 		// Initialize the Animation with the frame interval and array of frames
-		walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
+		walkAnimation = new Animation<TextureRegion>(0.105f, walkFrames);
 
 		// Instantiate a SpriteBatch for drawing and reset the elapsed animation
 		// time to 0
