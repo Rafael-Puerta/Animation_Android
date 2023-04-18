@@ -1,5 +1,6 @@
 package com.rafael_puerta.first_animation;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -9,12 +10,18 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.github.czyzby.websocket.WebSocket;
+import com.github.czyzby.websocket.WebSocketListener;
+import com.github.czyzby.websocket.WebSockets;
+
 
 public class firstAnimation extends ApplicationAdapter implements ApplicationListener {
 
 	// Constant rows and columns of the sprite sheet
 	private static final int FRAME_COLS = 3, FRAME_ROWS = 1;
-
+	private WebSocket socket;
+	private String address = "localhost";
+	private int port = 8888;
 	// Objects used
 	Animation<TextureRegion> walkAnimation; // Must declare frame type (TextureRegion)
 	Texture walkSheet;
@@ -29,6 +36,16 @@ public class firstAnimation extends ApplicationAdapter implements ApplicationLis
 		// Load the sprite sheet as a Texture
 		walkSheet = new Texture(Gdx.files.internal("beatRecortado.png"));
 
+		//TEST WEBSOCKET
+		if( Gdx.app.getType()== Application.ApplicationType.Android )
+			// en Android el host és accessible per 10.0.2.2
+			address = "10.0.2.2";
+		socket = WebSockets.newSocket(WebSockets.toWebSocketUrl(address, port));
+		socket.setSendGracefully(false);
+		socket.addListener((WebSocketListener) new MyWSListener());
+		socket.connect();
+		socket.send("Enviar dades");
+		//END TEST
 		// Use the split utility method to create a 2D array of TextureRegions. This is
 		// possible because this sprite sheet contains frames of equal size and they are
 		// all aligned.
@@ -53,6 +70,7 @@ public class firstAnimation extends ApplicationAdapter implements ApplicationLis
 		// time to 0
 		spriteBatch = new SpriteBatch();
 		stateTime = 0f;
+
 	}
 
 	@Override
@@ -71,5 +89,37 @@ public class firstAnimation extends ApplicationAdapter implements ApplicationLis
 	public void dispose() { // SpriteBatches and Textures must always be disposed
 		spriteBatch.dispose();
 		walkSheet.dispose();
+	}
+	class MyWSListener implements WebSocketListener {
+
+		@Override
+		public boolean onOpen(WebSocket webSocket) {
+			System.out.println("Opening...");
+			return false;
+		}
+
+		@Override
+		public boolean onClose(WebSocket webSocket, int closeCode, String reason) {
+			System.out.println("Closing...");
+			return false;
+		}
+
+		@Override
+		public boolean onMessage(WebSocket webSocket, String packet) {
+			System.out.println("Message:");
+			return false;
+		}
+
+		@Override
+		public boolean onMessage(WebSocket webSocket, byte[] packet) {
+			System.out.println("Message:");
+			return false;
+		}
+
+		@Override
+		public boolean onError(WebSocket webSocket, Throwable error) {
+			System.out.println("ERROR:"+error.toString());
+			return false;
+		}
 	}
 }
